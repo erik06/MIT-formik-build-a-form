@@ -1,59 +1,53 @@
 import React from "react";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function App() {
   const formik = useFormik({
     initialValues: {
-      name: "",
-      email: "",
-      password: "",
+      emailField: "",
+      pswField: "",
     },
+    validationSchema: Yup.object({
+      emailField: Yup.string()
+        .email("Invalid email address")
+        .required("Field required"),
+      pswField: Yup.string().required("Field required"),
+    }),
     onSubmit: (values) => {
       console.log("form", values);
-    },
-    validate: (values) => {
-      let errors = {};
-      if (!values.name) errors.name = "Required";
-      if (!values.email) errors.email = "Required";
-      if (!values.password) errors.password = "Required";
-      return errors;
+      alert("Login Successful");
     },
   });
 
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <div>Name</div>
-        <input
-          id="name"
-          type="text"
-          onChange={formik.handleChange}
-          value={formik.values.name}
-        />
-        {formik.errors.name ? (
-          <div style={{ color: "red" }}>{formik.errors.name}</div>
-        ) : null}
         <div>Email</div>
         <input
-          id="email"
+          id="emailField"
           type="text"
           onChange={formik.handleChange}
-          value={formik.values.email}
+          value={formik.values.emailField}
         />
-        {formik.errors.email ? (
-          <div style={{ color: "red" }}>{formik.errors.email}</div>
+        {formik.errors.emailField ? (
+          <div id="emailError" style={{ color: "red" }}>
+            {formik.errors.emailField}
+          </div>
         ) : null}
         <div>Password</div>
         <input
-          id="password"
+          id="pswField"
           type="text"
           onChange={formik.handleChange}
-          value={formik.values.password}
+          value={formik.values.pswField}
         />
-        {formik.errors.password ? (
-          <div style={{ color: "red" }}>{formik.errors.password}</div>
+        {formik.errors.pswField ? (
+          <div id="pswError" style={{ color: "red" }}>
+            {formik.errors.pswField}
+          </div>
         ) : null}
-        <button type="submit">Submit</button>
+        <button id="submitBtn" type="submit">Submit</button>
       </form>
     </>
   );
